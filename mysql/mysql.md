@@ -117,3 +117,111 @@ CREATE TABLE t1(
 |sex|enum('1','2','3')|YES| |3| |
 
 <font color="green">唯一约束 UNIQUE 指的是该字段数据不能有重复，比如上面的数据表中就不能插入两条username都为’tom‘的数据，即使这两个人只是同名</font>
+#### 四种约束
+- PRIMARY KEY 主键约束
+- UNIQUE KEY 唯一约束
+- DEFAULT 默认约束
+- NOT NULL 非空约束
+
+### 外键约束
+- 1.父表和子表必须使用相同的存储引擎，而且禁止使用临时表。
+- 2.数据表的存储引擎只能为InnoDB。
+- 3.外键列和参照列必须具有相似的数据类型。其中数字的长度或是有符号位都必须相同；而字符的长度则可以不同。
+- 4.外键列和参照列必须创建索引。如果外键列不存在索引的话，MySQL将自动创建索引。
+
+- ##### 创建一个省份表
+```mysql
+ CREATE TABLE province(
+    -> id SMALLINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    -> pname VARCHAR(20) NOT NULL
+    -> );
+```
+
+- ##### 查看创建表时的命令
+`SHOW CREATE TABLE province\G;`
+后面加上\G,可以过滤不必要的信息，方便查看。
+```mysql
+			Table: province
+Create Table: CREATE TABLE `province` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `pname` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+```
+可以看出符合存储引擎为InnoDB的外键约束要求
+
+- ##### 创建一个子表用户表
+```
+CREATE TABLE user(
+    -> id SMALLINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    -> username VARCHAR(10) NOT NULL,
+    -> pid SMALLINT UNSIGNED,
+    -> FOREIGN KEY (pid) REFERENCES province (id)
+    -> );
+```
+pid 作为外键列，province作为父表，其id为参照列，如果pid的数据类型和参照列的数据类型不同或者符号位不同，那么会报出150错误，创建子表失败。
+
+- ##### 查看数据表的索引
+`SHOW INDEX FROM province\G;`
+```
+*************************** 1. row ***************************
+        Table: province
+   Non_unique: 0
+     Key_name: PRIMARY
+ Seq_in_index: 1
+  Column_name: id
+    Collation: A
+  Cardinality: 0
+     Sub_part: NULL
+       Packed: NULL
+         Null:
+   Index_type: BTREE
+      Comment:
+Index_comment:
+```
+`SHOW INDEX FROM user\G;`
+```
+*************************** 1. row ***************************
+        Table: user
+   Non_unique: 0
+     Key_name: PRIMARY
+ Seq_in_index: 1
+  Column_name: id
+    Collation: A
+  Cardinality: 0
+     Sub_part: NULL
+       Packed: NULL
+         Null:
+   Index_type: BTREE
+      Comment:
+Index_comment:
+*************************** 2. row ***************************
+        Table: user
+   Non_unique: 1
+     Key_name: pid
+ Seq_in_index: 1
+  Column_name: pid
+    Collation: A
+  Cardinality: 0
+     Sub_part: NULL
+       Packed: NULL
+         Null: YES
+   Index_type: BTREE
+      Comment:
+Index_comment:
+```
+- ##### 查看user的数据表创建命令
+`SHOW CREATE TABLE user\G;`
+```
+*************************** 1. row ***************************
+       Table: user
+Create Table: CREATE TABLE `user` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(10) NOT NULL,
+  `pid` smallint(5) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pid` (`pid`),
+  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `province` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+```
+通过查看user表的创建命令，可以发现系统自动为子表的pid创建了索引id，参考(reference)province表的id。
