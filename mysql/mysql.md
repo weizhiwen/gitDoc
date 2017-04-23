@@ -1,6 +1,6 @@
 ## <center>mysql入门</center>
 
-### 数据类型
+### 1.数据类型
 根据项目的实际需要使用合适的数据类型，这也是数据优化的操作
 
 - <strong>整型</strong>
@@ -43,5 +43,77 @@
 |DATETIME|1000-01-01 00:00:00 / 9999-12-31 23:59:59|8|YYYY-MM-DD HH:MM:SS|混合日期和时间值|
 |TIMESTAMP|1970-01-01 00:00:00 / 2037 年某时|8|YYYY-MM-DD HH:MM:SS|混合日期和时间值，时间戳|
 
+### 2.数据表的操作
+关键字最好大写，这样便于阅读。可以用windows的cmd运行工具对数据库操作，前提是mysql的安装目录的子目录bin的路径添加导论系统变量PATH中，`mysql -v`可以查看数据库版本。登录：mysql -u用户名 -p密码，例如 `mysql -uroot -p123456` 。
 
+- 查看所有数据库 `SHOW DATABASES;`
+- 使用数据库 `USE 数据库名`
+- 查看当前使用的数据库 `SELECT database();`
+- 查看当前的用户 `SELECT user();`
+- 查看当前的时间 `SELECT now();`
+- 查看当前数据库的数据表 `SHOW TABLES;`
+- 查看其他数据库的数据表 `SHOW TABLES FROM 数据库名;`
+- 创建数据表 
+```mysql
+CREATE TABLE 数据表名(
+字段 类型 设定,
+字段 类型 设定
+);
+```
+- 查看数据表的结构 `SHOW COLUMNS FROM 数据表名`
+- 查看数据表中的全部数据 	`SELECT * FROM 数据表名`
 
+### 3.数据记录操作
+- 创建一个简单的数据表
+```mysql
+CREATE TABLE t1(
+    -> username VARCHAR(20) NOT NULL,
+    -> age TINYINT,
+    -> salary FLOAT(8,2)
+    -> );
+```
+- 查看刚才常见数据表的结构
+`SHOW COLUMNS FROM t1;`
+
+|Field|Type|Null|Key|Default|Extra|
+|---|---|---|---|---|---|
+|username|varchar(20)|NO| |NULL| |
+|age|tinyint(4)|YES| |NULL| |
+|salary|float(8,2)|YES| |NULL| |
+
+- 插入一行数据
+`INSERT INTO t1 VALUES('Tom',20,56310.54);` 
+`INSERT t1(username,salary) VALUES('Jon',75654.35);`
+
+<font color="blue">INTO关键字可以省略，在表名后面不跟字段，默认数据要插入所有字段的数据，否则会报错</font>
+
+- 查看刚才插入数据库的所有数据
+`SELECT * FROM t1;`
+
+|username|age|salary|
+|---|---:|---|
+|Tom|20|56310.54|
+|Jon|NULL|75654.35|
+
+- 创建自增长且主键约束和唯一约束的数据表
+```mysql
+ CREATE TABLE t2(
+    -> id SMALLINT AUTO_INCREMENT PRIMARY KEY,
+    -> username VARCHAR(20) NOT NULL UNIQUE,
+    -> age TINYINT UNSIGNED,
+    -> sex ENUM('1','2','3') DEFAULT 3
+    -> );
+```
+
+<font color="red">AUTO_INCREMENT 自动编号，必须与主键 PRIMARY KEY组合使用，默认情况下，起始值为1，每次的增量为1。但是使用主键时，不一定用到自动编号</font>
+- 查看刚才常见数据表的结构
+`SELECT * FROM t2;`
+
+|Field|Type|Null|Key|Default|Extra|
+|---|---|---|---|---|---|
+|id|smallint(6)|NO|PRI|NULL|auto_increment|
+|username|varchar(20)|NO|UNI|NULL| |
+|age|tinyint(3) unsigned|YES| |NULL| |
+|sex|enum('1','2','3')|YES| |3| |
+
+<font color="green">唯一约束 UNIQUE 指的是该字段数据不能有重复，比如上面的数据表中就不能插入两条username都为’tom‘的数据，即使这两个人只是同名</font>
