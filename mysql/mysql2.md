@@ -11,23 +11,18 @@ CREATE TABLE t1(
     -> );
 ```
 
-
-	- 添加字段 ALTER TABLE tablename ADD newcol_name col_definition [FIRST|AFTER col_name];
-	在刚才创建的t1表中新增一个id字段，并且把该字段放到字段首部。
-	
-	`ALTER TABLE t1 ADD id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY FIRST;`
-	添加多列，ALTER TABLE table_name ADD (col_name1 col_definition1, col_name2 col_definition2);
-	- 删除字段 ALTER TABLE tablename DROP col_name;
-	把刚才创建的id字段再删除。
-	
-	`ALTER TABLE t1 DROP id;`
-	- 修改列名称 ALTER TABLE tablename CHANGE id uid col_newdefinition [FIRST|AFTER col_name];
-	把刚才的id列名称和列定义修改
-	
-	`ALTER TABLE t4 CHANGE id uid TINYINT UNSIGNED NOT NULL;`
-	- 修改列定义 ALTER TABLE tablename MODIFY col_name col_definition [FIRST|AFTER col_name];
-	
-	`ALTER TABLE t4 CHANGE uid newid;`
+- 添加字段 ALTER TABLE tablename ADD newcol_name col_definition [FIRST|AFTER col_name];
+在刚才创建的t1表中新增一个id字段，并且把该字段放到字段首部。
+`ALTER TABLE t1 ADD id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY FIRST;`
+添加多列，ALTER TABLE table_name ADD (col_name1 col_definition1, col_name2 col_definition2);
+- 删除字段 ALTER TABLE tablename DROP col_name;
+把刚才创建的id字段再删除。
+`ALTER TABLE t1 DROP id;`
+- 修改列名称 ALTER TABLE tablename CHANGE id uid col_newdefinition [FIRST|AFTER col_name];
+把刚才的id列名称和列定义修改
+`ALTER TABLE t4 CHANGE id uid TINYINT UNSIGNED NOT NULL;`
+- 修改列定义 ALTER TABLE tablename MODIFY col_name col_definition [FIRST|AFTER col_name];	
+`ALTER TABLE t4 CHANGE uid newid;`
 	
 - ##### 针对约束的操作
 	- 添加默认约束 ALTER TABLE tablename ALTER col_name SET DEFAULT 默认值;
