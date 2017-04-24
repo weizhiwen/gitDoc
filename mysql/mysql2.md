@@ -10,6 +10,8 @@ CREATE TABLE t1(
     -> salary FLOAT(8,2)
     -> );
 ```
+
+
 	- 添加字段 ALTER TABLE tablename ADD newcol_name col_definition [FIRST|AFTER col_name];
 	在刚才创建的t1表中新增一个id字段，并且把该字段放到字段首部。
 	
