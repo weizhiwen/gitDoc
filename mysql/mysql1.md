@@ -60,7 +60,7 @@ CREATE TABLE 数据表名(
 字段 类型 设定
 );
 ```
-- 查看数据表的结构 `SHOW COLUMNS FROM 数据表名`
+- 查看数据表的结构 `SHOW COLUMNS FROM 数据表名` 等效命令 `DESCRIBE 数据表名`
 - 查看数据表中的全部数据 	`SELECT * FROM 数据表名`
 
 ### 3.数据记录操作
